@@ -62,8 +62,8 @@ void nRF24L01_set_TADDR(uint8_t * adr)
     	nRF24L01_write_register(TX_ADDR, adr,5);
 }
 
-/*  this was moved to the main program
-ISR( PCINT2_vect ) 
+
+extern void nRF24L01_interrupt () 
 {
     uint8_t status;   
     // If still in transmitting mode then finish transmission
@@ -88,7 +88,7 @@ ISR( PCINT2_vect )
         nRF24L01_config_register(STATUS,(1<<TX_DS)|(1<<MAX_RT)); // Reset status register
     }
 }
-*/
+
 extern uint8_t nRF24L01_data_ready() 
 // Checks if data is available for reading
 {

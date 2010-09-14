@@ -99,6 +99,7 @@ extern void nRF24L01_config();
 extern void nRF24L01_send(uint8_t * value, uint8_t len);
 extern void nRF24L01_set_RADDR(uint8_t * adr);
 extern void nRF24L01_set_TADDR(uint8_t * adr);
+extern void nRF24L01_interrupt ();
 extern uint8_t nRF24L01_data_ready();
 extern void nRF24L01_get_data(uint8_t * data);
 

@@ -4,6 +4,7 @@
 #include <avr/interrupt.h>
 #include "../spi.c"
 #include "../nRF24L01.c"
+//#include "../sleep.c"
 
 uint8_t nRF24L01_data[32];
 uint8_t *buffer =  &nRF24L01_data[0];
@@ -18,28 +19,7 @@ uint8_t buffersize = sizeof(nRF24L01_data);
 
 ISR( PCINT2_vect ) 
 {
-    uint8_t status;   
-    // If still in transmitting mode then finish transmission
-    PORTD ^= 1<<0; //toggle bit
-    if (PTX) {
-    
-        // Read nRF24L01 status 
-        nRF24L01_CSN_lo;			// Pull down chip select
-        status = spi_transmit_byte(NOP);	// Read status register
-        nRF24L01_CSN_hi;			// Pull up chip select
-
-    	nRF24L01_CSN_lo;			// Pull down chip select
-    	spi_transmit_byte( FLUSH_TX );		// Write cmd to flush tx fifo
-   	nRF24L01_CSN_hi;			// Pull up chip select
-
-        nRF24L01_CE_lo;				// Deactivate transreceiver
-        RX_POWERUP;                             // Power up in receiving mode
-        nRF24L01_CE_hi;				// Listening for pakets
-        PTX = 0;				// Set to receiving mode
-
-        // Reset status register for further interaction
-        nRF24L01_config_register(STATUS,(1<<TX_DS)|(1<<MAX_RT)); // Reset status register
-    }
+	nRF24L01_interrupt ();
 }
 
 
