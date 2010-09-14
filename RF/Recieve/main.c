@@ -44,14 +44,16 @@ int main(void){
 	//set up PORTD for indicating LED lights
 	SET_BIT(DDRD, 0);
 	SET_BIT(DDRD, 1);
-	SET_BIT(PORTD, 1);
 
 	//wait 300ms before starting 
 	_delay_ms(3000);
 
 	while(1)	//infinite loop
 	{
-		while (!nRF24L01_data_ready());		//wait for packet from nRF24L01+
+		while (!nRF24L01_data_ready())		//wait for packet from nRF24L01+
+		{
+		sleep_ms(1);
+		}
 		_delay_us(100);				//wait 100us before reading the data
 		nRF24L01_get_data(buffer);			//get the data from the nRF24L01+ and store it in the buffer
 

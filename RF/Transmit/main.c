@@ -23,7 +23,7 @@ ISR( PCINT2_vect )
 
 ISR(TIMER2_OVF_vect)	//when timer 2 interrupts
 {			//wake up from sleeping
-	sleep_int_handler();
+	sleep_disable();
 }
 
 int main(void){
