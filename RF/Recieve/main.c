@@ -1,3 +1,4 @@
+//RF Recieve
 #define F_CPU 8000000UL /* 8 MHz Internal Oscillator */
 #include <avr/io.h>
 #include <util/delay.h>
@@ -21,6 +22,13 @@ ISR( PCINT2_vect )
 {
 	nRF24L01_interrupt ();
 }
+
+ISR(TIMER2_OVF_vect)	//when timer 2 interrupts
+{			//wake up from sleeping
+	sleep_int_handler();
+}
+
+ISR( BADISR_vect ){} //handle potential bad interrupt vectors by doing nothing
 
 
 int main(void){

@@ -1,9 +1,10 @@
+//RF transmission
 #define F_CPU 8000000UL /* 8 MHz Internal Oscillator */
 #include <avr/io.h>
 #include <util/delay.h>
 #include "../spi.c"
 #include "../nRF24L01.c"
-
+#include "../sleep.c"
 uint8_t nRF24L01_data[32];
 uint8_t *buffer =  &nRF24L01_data[0];
 uint8_t buffersize = sizeof(nRF24L01_data);
@@ -20,6 +21,10 @@ ISR( PCINT2_vect )
 	nRF24L01_interrupt ();
 }
 
+ISR(TIMER2_OVF_vect)	//when timer 2 interrupts
+{			//wake up from sleeping
+	sleep_int_handler();
+}
 
 int main(void){
 	//initialize ports
@@ -48,8 +53,9 @@ int main(void){
 		}
 
 		//send the data to the nRF24L01+
-		nRF24L01_send(buffer,1);	
-		_delay_ms(1000);	//wait 1 second before sending new data
+		nRF24L01_send(buffer,1);
+		_delay_ms(1);	
+		sleep_ms(1000);	//wait 1 second before sending new data
 	}
 }
 
